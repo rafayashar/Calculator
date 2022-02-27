@@ -40,7 +40,7 @@ function operate(arithmetic, num1, num2) {
         case '-':
             return subtract(num1, num2);
             break;
-        case '*':
+        case 'x':
             return multiply(num1, num2);
             break;
         case '/':
@@ -50,6 +50,12 @@ function operate(arithmetic, num1, num2) {
            alert('Wrong Input! Check your arithmetic sign.');
     }
 }
+let numRound = 0;
+let opRound = 0;
+let num = [];
+let operator = [];
+let answer;
+let previousOpRound = -1;
 
 const container = document.querySelector('#container');
 
@@ -65,12 +71,13 @@ numericPad.classList.add('numericPad');
 
 const equals = document.createElement('div');
 equals.textContent = '=';
-equals.classList.add('numericKey');
+equals.classList.add('equals');
 equals.style.order = 10;
 numericPad.appendChild(equals);
 
 const point = document.createElement('div');
 point.textContent = '.';
+point.classList.add('point');
 point.classList.add('numericKey');
 point.style.order =10;
 numericPad.appendChild(point);
@@ -86,56 +93,108 @@ for (let i = 0; i < 10; i++) {
 const arithmeticPad = document.createElement('div');
 arithmeticPad.classList.add('arithmeticPad');
 
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 4; i++) {
     const div = document.createElement('div');
     div.classList.add('arithmeticKey');
-    div.style.order = 5 - i;
+    div.style.order = 4 - i;
     arithmeticPad.appendChild(div);
 }
+
+const erase = document.createElement('div');
+erase.classList.add('erase');
+erase.textContent = 'A/C';
+erase.style.order = 0;
+arithmeticPad.appendChild(erase);
+
 arithmeticPad.childNodes[0].textContent = '+';
 arithmeticPad.childNodes[1].textContent = '-';
 arithmeticPad.childNodes[2].textContent = 'x';
 arithmeticPad.childNodes[3].textContent = '/';
-arithmeticPad.childNodes[4].textContent = 'A/C';
-
-const plus = arithmeticPad.childNodes[0];
-const minus = arithmeticPad.childNodes[1];
-const mult = arithmeticPad.childNodes[2];
-const divi = arithmeticPad.childNodes[3];
-const erase = arithmeticPad.childNodes[4];
 
 container.appendChild(screen);
 container.appendChild(pad);
 pad.appendChild(numericPad);
 pad.appendChild(arithmeticPad);
 
+let count = [];
+
 erase.addEventListener('click', () => {
-    screen.textContent = '1';
-    calcRound = 1;
+    screen.textContent = '0';
     answer = 0;
+    num = [];
+    num[0] = '';
+    operator = [];
+    numRound = 0;
+    opRound = 0;
+    previousOpRound = -1;
+    count = [];
 });
 
-plus.addEventListener('click', add);
-minus.addEventListener('click', subtract);
-mult.addEventListener('click', multiply);
-divi.addEventListener('click', divide);
+num[0] = ''
+count[0] = 0;
+const keys = document.querySelectorAll('.numericKey');
 
-const keys = document.querySelectorAll('.numericPad');
-let num = [];
-let operator;
-let calcRound = 1;
-keys.addEventListener('click', function (e) {
-    for(let i = calcRound; i <= 3; i++) {
-        num[i] = e.target.textContent;
+keys.forEach((key) => {
+    key.addEventListener('click', function (e) {
 
-        if (i == 3) {
-            i = 2;
+        e.target.classList.add('animation');
+
+        if (previousOpRound <= opRound) {
+            num[numRound] = num[numRound] + e.target.textContent;
         };
 
-        num[1] = answer;
-    };
+        if (num[numRound] == '0' && operator[numRound - 1] == '/') {
+            alert('YOU CAN NOT DIVIDE BY ZERO! THAT\'S CRAZY! Just....try again.');
+            num[numRound] = '';
+        }
+        else if (count[numRound] > 1) {
+                alert(`WHAT KIND OF NUMBER IS ${num[numRound]}! Try again..`);
+                num[numRound] = '';
+                count[numRound] = 0;
+                screen.textContent = num[numRound-1];
+        }
+        else {
+            screen.textContent = num[numRound];
+        }
+
+        if (e.target.textContent == '.') {
+            count[numRound] = count[numRound] + 1;
+        }
+    });
 });
 
+function removeTransition() {
+    this.classList.remove('animation');
+}
+
+const transArith = document.querySelectorAll('.arithmeticKey');
+transArith.forEach(tranArith => tranArith.addEventListener('transitionend', removeTransition));
+
+const transNum = document.querySelectorAll('.numericKey');
+transNum.forEach(tranNum => tranNum.addEventListener('transitionend', removeTransition));
+
+const operation = document.querySelectorAll('.arithmeticKey');
+operation.forEach((sign) => {
+    sign.addEventListener('click', function (e) {
+
+        e.target.classList.add('animation');
+        operator[opRound] = e.target.textContent;
+        opRound++;
+        previousOpRound++;
+        numRound = opRound;
+        num[numRound] = '';
+        count[numRound] = 0;
+    });
+});
+
+
 equals.addEventListener('click', () => {
-    operate(num[2], num[1], num[3]);
+
+    answer = num[0];
+    for (let i = 0; i < operator.length; i++) {
+        answer = operate(String(operator[i]), parseFloat(answer), parseFloat(num[i+1]));
+        screen.textContent = Math.round((answer + Number.EPSILON) * 100) / 100;
+    };
+
+    i = 0;
 });

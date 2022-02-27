@@ -12,17 +12,19 @@ body {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    background-color: rgb(163, 162, 162);
 }
 
 .screen {
     border-style: solid;
     border-width: 1px;
-    margin: 5px;
-    width: 416px;
+    margin: 4px 4px 2px 4px;
+    width: 418px;
     height: 100px;
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+    background-color: wheat;
 }
 
 .pad {
@@ -30,22 +32,12 @@ body {
 }
 
 .numericPad {
-    margin-top: 102px;
+    margin-top: 106px;
     border-style: solid;
     border-width: 0px;
     display: flex;
     flex-flow: row-reverse wrap;
-    width: 308px;
-}
-
-.numericKey {
-    border-style: solid;
-    border-width: 1px;
-    height: 100px;
-    width: 100px;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 100px;
+    width: 320px;
 }
 
 .arithmeticPad {
@@ -56,12 +48,45 @@ body {
     width: 108px;
 }
 
-.arithmeticKey {
+.arithmeticKey, .numericKey, .erase, .point, .equals {
     border-style: solid;
     border-width: 1px;
+    margin: 2px 2px;
     height: 100px;
     width: 100px;
     text-align: center;
     vertical-align: middle;
     line-height: 100px;
+    transition: all 0.02s;
+    border-color: black;
+}
+
+.arithmeticKey, .erase {
+    margin: 2px 4px 2px 2px;
+}
+
+.arithmeticKey:first-child, .point, .equals {
+    margin-bottom: 4px;
+}
+
+div .arithmeticKey, div .erase {
+    background-color: orange;
+}
+
+div .numericKey, div .point {
+    background-color: skyblue;
+}
+
+div .equals {
+    background-color: steelblue;
+}
+
+div {
+    font-weight: bold;
+    font-size: 28px;
+}
+
+.animation {
+    transform: scale(1.05);
+    border-color: red;
 }

@@ -1,3 +1,4 @@
+// FUNCTION TO ADD NUMBERS
 function add() {
     let addition = 0;
     for (let i = 0; i < arguments.length; i++) {
@@ -6,6 +7,7 @@ function add() {
     return addition;
 }
 
+//FUNCTION TO SUBTRACT NUMBERS
 function subtract() {
     let i = 0;
     let subtraction = arguments[i];
@@ -15,6 +17,7 @@ function subtract() {
     return subtraction;
 }
 
+// FUNCTION TO MULTIPLY NUMBERS
 function multiply() {
     let multiply = 1;
     for (let i = 0; i < arguments.length; i++) {
@@ -23,6 +26,7 @@ function multiply() {
     return multiply;
 }
 
+// FUNCTION TO DIVIDE NUMBERS
 function divide() {
     let i = 0;
     let divide = arguments[i];
@@ -32,6 +36,8 @@ function divide() {
     return divide;
 }
 
+// FUNCION THAT TAKES IN AN ARITHMETIC SIGN ('+', '-', 'x', '/') IN STING FORMAT, AS WELL AS TWO NUMBERS, AND THEN CALLS THE APPROPIATE
+// FUNCTION (ADD(), SUBTRACT(), MULTIPLY(), DIVIDE()). THEN RETURNS THE RESULT.
 function operate(arithmetic, num1, num2) {
     switch (String(arithmetic)) {
         case '+':
@@ -50,6 +56,8 @@ function operate(arithmetic, num1, num2) {
            alert('Wrong Input! Check your arithmetic sign.');
     }
 }
+
+// INITIALIZING AND DECLARING SOME VARIABLES USED IN LATER ITERATIONS
 let numRound = 0;
 let opRound = 0;
 let num = [];
@@ -57,24 +65,32 @@ let operator = [];
 let answer;
 let previousOpRound = -1;
 
+// SELECTING MAIN DIV INSIDE THE BODY THAT WILL CONTAIN THE CALCULATOR
 const container = document.querySelector('#container');
 
+// ADDING A DIV TO THE CONTAINER TO REPRESENT THE SCREEN WHERE THE ANSWER WILL BE DISPLAYED
 const screen = document.createElement('div');
 screen.classList.add('screen');
 screen.textContent = '0';
 
+// ADDING A DIV WHICH WILL REPRESENT THE KEY PAD PORTION OF THE CALCULATOR. THE KEY PAD WILL BE DIVIDED IN TO TWO MAIN SECTIONS.
+// ONE WILL BE THE NUMERIC PAD, WHICH ARE NUMBERS FROM 0 - 9. THE OTHER WILL BE THE ARITHMETIC PAD, WHICH ARE ARITHMETIC SIGNS.
+// ADITIONAL KEYS IN THE PAD INCLUDE EQUALS SIGN, DOT FOR POINT, CLEAR BUTTON ETC.
 const pad = document.createElement('div');
 pad.classList.add('pad');
 
+// CREATING AND ATTACHING THE NUMERIC PAD TO THE PAD DIV
 const numericPad = document.createElement('div');
 numericPad.classList.add('numericPad');
 
+// CREATING AND ATTACHING THE EQUALS BUTTON TO THE NUMERIC PAD
 const equals = document.createElement('div');
 equals.textContent = '=';
 equals.classList.add('equals');
 equals.style.order = 10;
 numericPad.appendChild(equals);
 
+// CREATING AND ATTACHING THE POINT BUTON TO THE NUMERIC PAD
 const point = document.createElement('div');
 point.textContent = '.';
 point.classList.add('point');
@@ -82,6 +98,7 @@ point.classList.add('numericKey');
 point.style.order =10;
 numericPad.appendChild(point);
 
+// CREATING BUTTONS 0 - 9 AND ATTACHING TO THE NUMERIC PAD
 for (let i = 0; i < 10; i++) {
     const div = document.createElement('div');
     div.classList.add('numericKey');
@@ -93,6 +110,7 @@ for (let i = 0; i < 10; i++) {
 const arithmeticPad = document.createElement('div');
 arithmeticPad.classList.add('arithmeticPad');
 
+// CREATING BUTTONS FOR ARITHMETIC SIGNS AND ATTACHING TO THE ARITHMETIC PAD
 for (let i = 0; i < 4; i++) {
     const div = document.createElement('div');
     div.classList.add('arithmeticKey');
@@ -100,6 +118,7 @@ for (let i = 0; i < 4; i++) {
     arithmeticPad.appendChild(div);
 }
 
+// CREATING THE ERASE BUTTON AND ATTACHING TO THE ARITHMETIC PAD
 const erase = document.createElement('div');
 erase.classList.add('erase');
 erase.textContent = 'A/C';
@@ -111,13 +130,16 @@ arithmeticPad.childNodes[1].textContent = '-';
 arithmeticPad.childNodes[2].textContent = 'x';
 arithmeticPad.childNodes[3].textContent = '/';
 
+// ATTACHING THE NUMERIC PAD AND ARITHMETIC PAD TO THE PAD DIV, AND THE PAD DIV AND SCREEN DIV TO THE MAIN CONTAINER DIV
 container.appendChild(screen);
 container.appendChild(pad);
 pad.appendChild(numericPad);
 pad.appendChild(arithmeticPad);
 
+// INITIALIZING COUNT VARIABLE WHICH WILL DETERMINE HOW MANY TIMES POINT (DOT) HAS BEEN USED PER NUMBER INPUT
 let count = [];
 
+// ADDING EVNT LISTENER TO ERASE BUTTON WHICH WILL CLEAR ALL VARIABLES USED IN A CALCULATIONS, INCLUDING ALL COUNTERS, ANSWER, SCREEN DISPLAY ETC.
 erase.addEventListener('click', () => {
     screen.textContent = '0';
     answer = 0;
@@ -130,10 +152,15 @@ erase.addEventListener('click', () => {
     count = [];
 });
 
+// INITIALIZING NUMB ARAY WHICH WILL HOLD NUMBER INPUTS AND COUNT ARRAY WHICH WILL HOLD HOW MANY TIMES POINT (DOT) HAS BEEN USED
 num[0] = ''
 count[0] = 0;
 const keys = document.querySelectorAll('.numericKey');
 
+
+// EVENT LISTENER TO LISTEN FOR WHICH NUMBER KEY HAS BEEN PRESSED. ALSO CHECKS IF USER IS DIVIDING BY ZERO AND GIVES AN ERROR MESSAGE IF TRUE.
+// ALSO CHECKS IF USER HAS USED TWO DECIMAL POINTS IN A NUMBER (X.Y.Z) AND GIVES AN ERROR MESSAGE IF TRUE. ALSO ADDS ANIMATION FOR WHEN A KEY
+// IS PRESSED.
 keys.forEach((key) => {
     key.addEventListener('click', function (e) {
 
@@ -167,12 +194,14 @@ function removeTransition() {
     this.classList.remove('animation');
 }
 
+// REMOVE ANIMATION CLASS WHEN ANIMATION IS COMPLETE. 
 const transArith = document.querySelectorAll('.arithmeticKey');
 transArith.forEach(tranArith => tranArith.addEventListener('transitionend', removeTransition));
 
 const transNum = document.querySelectorAll('.numericKey');
 transNum.forEach(tranNum => tranNum.addEventListener('transitionend', removeTransition));
 
+// EVENT LISTENER TO LISTEN FOR WHICH ARITHMETIC SIGN IS PRESSED AND HOLD IT IN AN ARRAY.
 const operation = document.querySelectorAll('.arithmeticKey');
 operation.forEach((sign) => {
     sign.addEventListener('click', function (e) {
@@ -187,7 +216,7 @@ operation.forEach((sign) => {
     });
 });
 
-
+// LISTEN FOR WHEN EQUALS KEY IS PRESSED AND PASS THE NUMBERS AND ARITHMETIC SIGN TO THE OPERATE FUNCTION AND DISPLAT RESULT
 equals.addEventListener('click', () => {
 
     answer = num[0];
